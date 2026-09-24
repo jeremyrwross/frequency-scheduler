@@ -1,7 +1,7 @@
 {
     "name": "jeremyrwross/frequency-scheduler",
+    "description": "Run Laravel scheduled tasks with an independent probability within specified time periods.",
     "type": "library",
-    "version": "1.0.0",
     "keywords": ["laravel", "scheduler", "frequency", "php", "cron"],
     "license": "MIT",
     "autoload": {
@@ -21,7 +21,10 @@
         }
     ],
     "require": {
-        "php": "^8.3.0"
+        "php": "^8.3.0",
+        "illuminate/console": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "nesbot/carbon": "^3.8.4"
     },
     "extra": {
         "laravel": {
@@ -38,7 +41,7 @@
         "pestphp/pest": "^3.5",
         "laravel/pint": "^1.18",
         "nunomaduro/collision": "^8.5",
-        "orchestra/testbench": "^9.6",
+        "orchestra/testbench": "^10.0 || ^11.0",
         "pestphp/pest-plugin": "^3.0"
     },
     "config": {

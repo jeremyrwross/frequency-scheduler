@@ -3,6 +3,11 @@
 use Carbon\Carbon;
 use Jeremyrwross\FrequencyScheduler\FrequencyScheduler;
 
+afterEach(function () {
+    Carbon::setTestNow();
+    mt_srand();
+});
+
 it(
     'throws an exception if start time is not in H:i format', function () {
         FrequencyScheduler::frequencyByPeriod(123, '23:00', 50);
