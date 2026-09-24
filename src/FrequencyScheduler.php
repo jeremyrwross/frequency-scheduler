@@ -3,6 +3,7 @@
 namespace Jeremyrwross\FrequencyScheduler;
 
 use Carbon\Carbon;
+use DateTimeZone;
 use InvalidArgumentException;
 
 /**
@@ -23,14 +24,15 @@ class FrequencyScheduler
     /**
      * Bootstrap any application services.
      *
-     * @param string $startTime           The start time in 'H:i' format.
-     * @param string $endTime             The end time in 'H:i' format.
-     * @param int    $frequencyPercentage The frequency percentage (0-100).
+     * @param  string  $startTime  The start time in 'H:i' format.
+     * @param  string  $endTime  The end time in 'H:i' format.
+     * @param  int  $frequencyPercentage  The frequency percentage (0-100).
+     * @param  DateTimeZone|string|null  $timezone  The timezone for the period, or PHP's default.
      */
-    public static function frequencyByPeriod(string $startTime, string $endTime, int $frequencyPercentage): bool
+    public static function frequencyByPeriod(string $startTime, string $endTime, int $frequencyPercentage, DateTimeZone|string|null $timezone = null): bool
     {
 
-        if (! preg_match('/^\d{2}:\d{2}$/', $startTime) || ! preg_match('/^\d{2}:\d{2}$/', $endTime)) {
+        if (! preg_match('/\A([01][0-9]|2[0-3]):[0-5][0-9]\z/', $startTime) || ! preg_match('/\A([01][0-9]|2[0-3]):[0-5][0-9]\z/', $endTime)) {
             throw new InvalidArgumentException('Start time and end time must be in the format H:i.');
         }
 
@@ -42,14 +44,8 @@ class FrequencyScheduler
             return false;
         }
 
-        $currentHourMinute = Carbon::now()->format('H:i');
-
-        $random = mt_rand(1, 100);
-
-        // Check if the current time is within the defined range
-        $startTime = Carbon::createFromFormat('H:i', $startTime);
-        $endTime = Carbon::createFromFormat('H:i', $endTime);
-        $currentTime = Carbon::createFromFormat('H:i', $currentHourMinute);
+        // Validated, zero-padded clock times can be compared directly.
+        $currentTime = Carbon::now($timezone)->format('H:i');
 
         // Handle wrapping time ranges like "23:00 to 02:00"
         if ($endTime < $startTime) {
@@ -63,7 +59,7 @@ class FrequencyScheduler
         }
 
         // Check if the frequency percentage condition is met
-        return $random <= $frequencyPercentage;
+        return mt_rand(1, 100) <= $frequencyPercentage;
 
     }
 }

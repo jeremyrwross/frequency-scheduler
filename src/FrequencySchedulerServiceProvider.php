@@ -29,7 +29,7 @@ class FrequencySchedulerServiceProvider extends ServiceProvider
     {
         Event::macro(
             'frequencyByPeriod', function ($startTime, $endTime, $frequencyPercentage) {
-                return $this->when(FrequencyScheduler::frequencyByPeriod($startTime, $endTime, $frequencyPercentage));
+                return $this->when(fn () => FrequencyScheduler::frequencyByPeriod($startTime, $endTime, $frequencyPercentage, $this->timezone));
             }
         );
     }
